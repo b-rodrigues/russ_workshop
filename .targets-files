@@ -1,0 +1,13 @@
+.gitignore
+.quarto/_freeze/russ_pres/execute-results/html.json
+.quarto/xref/621ef9bd
+.quarto/xref/INDEX
+.targets-files
+_targets/.gitignore
+_targets/meta/meta
+_targets/meta/process
+_targets/meta/progress
+_targets/objects/paper_change
+rendered_slides/img/play_store.png
+rendered_slides/russ_pres.html
+result

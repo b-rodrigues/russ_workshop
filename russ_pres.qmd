@@ -1,0 +1,334 @@
+---
+title: "rix: environnements de développement reproductibles pour développeurs R"
+author: "Bruno Rodrigues"
+format:
+  revealjs:
+    embed-resources: true
+    slide-number: true
+    theme: solarized
+    incremental: true
+execute:
+  echo: true
+---
+
+## Qui suis-je?
+
+- Bruno Rodrigues, responsable des départements "statistiques" et "stratégie de données" du Ministère 
+  de la Recherche et de l’Enseignement supérieur au Luxembourg
+
+- Utilisateur de R depuis 2009
+
+- Cette présentation est disponible sur le lien suivant [https://is.gd/nix_russ](https://is.gd/nix_russ)
+
+- Code available at: [https://github.com/b-rodrigues/russ_workshop](https://github.com/b-rodrigues/russ_workshop)
+
+## Goal of this workshop
+
+- Learn just enough of Nix to use it for your R projects
+- Show different use-cases
+- Time allowing: how to make your own binary cache using [Cachix](https://www.cachix.org/)
+
+## What is Nix? (1/2)
+
+- A package manager
+- A programming language
+- An operating system ([NixOS](https://nixos.org/))
+
+. . .
+
+Our focus today: the package manager
+
+## What is Nix? (2/2)
+
+A word of warning: Nix is quite complex
+
+It does require some time to learn on the user's part
+
+But `{rix}` will help
+
+## The Nix package manager
+
+Package manager: tool to install and manage *packages*
+
+Package: any piece of software (not just R packages)
+
+A popular package manager:
+
+## The Nix package manager
+
+![Google Play Store](img/play_store.png)
+
+## The reproducibility continuum
+
+- Make sure that the required/correct version of R (or any other language) is
+  installed;
+
+- Make sure that the required versions of packages are installed;
+
+- Make sure that system dependencies are installed (for example,
+  Java installation for rJava);
+
+- Make sure that you can install all of this for the hardware you have on hand.
+
+## Reproducibility in the R ecosystem
+
+- Per-project environments not often used
+- Popular choice: `{renv}`, but deals with R packages only
+- Still need to take care of R itself
+- System-level dependencies as well!
+
+. . .
+
+A popular approach: Docker + `{renv}` (see [Rocker project](https://rocker-project.org/))
+
+. . .
+
+Nix deals with everything, with one single text file (called a Nix expression)!
+
+## "Functional" package manager (1/2)
+
+- Nix: a *functional* package manager
+
+- Functional, as in, inspired by mathematical functions
+
+- Why math functions?
+
+. . .
+
+-> f(x)=y
+
+- Building a Nix expression always results in the same output
+
+- Output doesn't depend on state of current system:
+
+## "Functional" package manager (2/2)
+
+> The idea is to always deploy component closures: if we deploy a component,
+> then we must also deploy its dependencies, their dependencies, and so on. That
+> is, we must always deploy a set of components that is closed under the
+> ''depends on'' relation. Since closures are selfcontained, they are the units
+> of complete software deployment. After all, if a set of components is not
+> closed, it is not safe to deploy, since using them might cause other
+> components to be referenced that are missing on the target system.
+
+<p style="font-size: x-large">Eelco Dolstra, *Nix: A Safe and Policy-Free System for Software Deployment*</p>
+
+
+
+
+## A basic Nix expression (1/6)
+
+```
+let
+  pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};
+  system_packages = builtins.attrValues {
+    inherit (pkgs) R ;
+  };
+in
+  pkgs.mkShell {
+    buildInputs = [ system_packages ];
+    shellHook = "R --vanilla";
+  }
+```
+
+There's a lot to discuss here!
+
+## A basic Nix expression (2/6)
+
+- Written in the Nix language (not discussed)
+- Defines the repository to use (with a fixed revision)
+- Lists packages to install
+- Defines the output: a development shell
+
+## A basic Nix expression (3/6)
+
+- Software for Nix is defined as a mono-repository of tens of thousands of expressions on Github
+- Github: we can use any commit to pin package versions for reproducibility!
+- For example, the following commit installs R 4.3.1 and associated packages:
+
+. . .
+
+```
+pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};
+```
+
+- Let's take a look at the [repository](https://github.com/NixOS/nixpkgs)...
+
+## A basic Nix expression (4/6)
+
+- `system_packages`: a variable that lists software to install
+- In this case, only R:
+
+. . .
+
+```
+system_packages = builtins.attrValues {
+  inherit (pkgs) R ;
+};
+```
+
+## A basic Nix expression (5/6)
+
+- Finally, we define a shell:
+
+. . .
+
+```
+pkgs.mkShell {
+  buildInputs = [ system_packages ];
+  shellHook = "R --vanilla";
+}
+```
+
+. . .
+
+- This shell will come with the software defined in `system_packages` (`buildInputs`)
+- And launch `R --vanilla` when started (`shellHook`)
+
+## A basic Nix expression (6/6)
+
+- Writing these expressions requires learning a new language
+- While incredibly powerful, if all we want are per-project reproducible dev shells...
+- ...then `{rix}` will help!
+
+## Nix expressions
+
+- Nix expressions can be used to install software
+- But we will use them to build per-project development shells
+- We will include R, LaTeX packages, or Quarto, Python, Julia....
+- Nix takes care of installing every dependency down to the compiler!
+
+## CRAN and Bioconductor
+
+- CRAN is the repository of R packages to extend the language
+- As of writing, +20000 packages available
+- Biocondcutor: repository with a focus on Bioinformatics: +2000 more packages
+- Almost all available through `nixpkgs` in the `rPackages` set!
+- Find packages [here](https://search.nixos.org/packages?channel=23.11&from=0&size=50&sort=relevance&type=packages&query=dplyr)
+
+## rix: reproducible development environments with Nix (1/4)
+
+- `{rix}` ([website](https://b-rodrigues.github.io/rix/index.html)) makes writing Nix expression easy!
+- Simply use the provided `rix()` function:
+
+. . .
+
+```{r, eval = FALSE}
+library(rix)
+
+rix(r_ver = "4.3.1",
+    r_pkgs = c("dplyr", "ggplot2"),
+    system_pkgs = NULL,
+    git_pkgs = NULL,
+    tex_pkgs = NULL,
+    ide = "rstudio",
+    # This shellHook is required to run Rstudio on Linux
+    # you can ignore it on other systems
+    shell_hook = "export QT_XCB_GL_INTEGRATION=none",
+    project_path = ".")
+```
+
+## rix: reproducible development environments with Nix (2/4)
+
+- List required R version and packages
+- Optionally: more system packages, packages hosted on Github, or LaTeX packages
+- Optionally: an IDE (Rstudio, Radian, VS Code or "other")
+- Work interactively in an isolated environment!
+
+## rix: reproducible development environments with Nix (3/4)
+
+- `rix::rix()` generates a `default.nix` file
+- Build expressions using `nix-build` (in terminal) or `rix::nix_build()` from R 
+- "Drop" into the development environment using `nix-shell`
+- Expressions can be generated even without Nix installed
+
+## rix: reproducible development environments with Nix (4/4)
+
+- Can install specific versions of packages (write `"dplyr@1.0.0"`)
+- Can install packages hosted on Github
+- Many vignettes to get you started! [See here](https://b-rodrigues.github.io/rix/articles/)
+
+. . .
+
+Let's check out `expressions/rix_intro/`
+
+## Non-interactive use
+
+- `{rix}` makes it easy to run pipelines in the right environment
+- (Little side note: the best tool to build pipelines in R is `{targets}`)
+- See `expressions/nix_targets_pipeline`
+- Can also run the pipeline like so:
+
+. . .
+
+```
+cd /absolute/path/to/pipeline/ && nix-shell default.nix --run "Rscript -e 'targets::tar_make()'"
+```
+
+## Nix and Github Actions: running pipelines
+
+- Possible to easily run a `{targets}` pipeline on Github actions
+- Simply run `rix::tar_nix_ga()` to generate the required files
+- Commit and push, and watch the actions run!
+- See [here](https://github.com/b-rodrigues/nix_targets_pipeline/tree/master).
+
+## Nix and Github Actions: writing papers
+
+- Easy collaboration on papers as well
+- See [here](https://github.com/b-rodrigues/rix_paper/tree/master)
+- Just focus on writing!
+
+## Subshells
+
+- Also possible to evaluate single functions inside a "subshell"
+- Works from R installed via Nix or not!
+- Very useful to use hard-to-install packages such as {arrow}
+- See `expressions/subshell`
+
+## R packages release cycle
+
+- CRAN is updated daily, but it’s not reflected in nixpkgs
+- The `rPackages` set gets updated around new R releases (every 3 months or so)
+- What if more recent packages are required?
+- One solution: use our `nixpkgs` fork from our `rstats-on-nix` [organisation](https://github.com/rstats-on-nix/nixpkgs/tree/r-daily)!
+
+## Bleeding edge development environments (1/2)
+
+- To use our bleeding edge fork simply change the `pkgs` variable:
+
+. . .
+
+```
+pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/refs/heads/r-daily.tar.gz") {};
+```
+
+- You can also use a specific commit of the fork instead:
+
+. . .
+
+```
+pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/78f705bd8689ad7d215f4b3aea9d9c1302a31b99.tar.gz") {};
+```
+
+. . .
+
+- Will soon be supported in `{rix}`
+
+## Bleeding edge development environments (2/2)
+
+- But: everything needs to be built from source
+- Solution: roll out your own binary cache using [Cachix](https://www.cachix.org/)
+- Build the development environment on Github Actions
+- On your pc: install pre-compiled binaries!
+
+## To know more
+
+- Official Nix documentation: [https://nix.dev/](https://nix.dev/)
+
+- Nix pills: [https://nixos.org/guides/nix-pills/00-preface](https://nixos.org/guides/nix-pills/00-preface)
+
+- Nix tutorial by INRIA: [https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/](https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/)
+
+- My blog: [https://b-rodrigues.github.io/rix/](https://b-rodrigues.github.io/rix/)
+
+- My book (doesn't cover Nix, but Docker, `{renv}` and functional programming): [https://raps-with-r.dev/](https://raps-with-r.dev/)

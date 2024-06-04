@@ -1,0 +1,4 @@
+project:
+  output-dir: rendered_slides
+
+format: html
