@@ -1,5 +1,5 @@
 ---
-title: "rix: reproducible development environments for R programmers"
+title: "rix: environnements de développement reproductibles pour développeurs R"
 author: "Bruno Rodrigues"
 format:
   revealjs:
@@ -11,16 +11,16 @@ execute:
   echo: true
 ---
 
-## Who am I?
+## Qui suis-je?
 
-- Bruno Rodrigues, head of the statistics and data strategy departments at the
- Ministry of Research and Higher education in Luxembourg
+- Bruno Rodrigues, responsable des départements "statistiques" et "stratégie de données" du Ministère 
+  de la Recherche et de l’Enseignement supérieur au Luxembourg
 
-- Using R since 2009
+- Utilisateur de R depuis 2009
 
-- Slides available online at [https://is.gd/nix_dipf](https://is.gd/nix_dipf)
+- Cette présentation est disponible sur le lien suivant [https://is.gd/nix_russ](https://is.gd/nix_russ)
 
-- Code available at: [https://github.com/b-rodrigues/dipf_workshop](https://github.com/b-rodrigues/dipf_workshop)
+- Code available at: [https://github.com/b-rodrigues/russ_workshop](https://github.com/b-rodrigues/russ_workshop)
 
 ## Goal of this workshop
 
