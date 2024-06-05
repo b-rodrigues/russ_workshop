@@ -22,86 +22,108 @@ execute:
 
 - Code source disponible ici: [https://github.com/b-rodrigues/russ_workshop](https://github.com/b-rodrigues/russ_workshop)
 
-## Goal of this workshop
+## But de cet atelier
 
-- Learn just enough of Nix to use it for your R projects
-- Show different use-cases
-- Time allowing: how to make your own binary cache using [Cachix](https://www.cachix.org/)
-
-## What is Nix? (1/2)
-
-- A package manager
-- A programming language
-- An operating system ([NixOS](https://nixos.org/))
+- Apprendre juste ce qu'il faut de Nix pour "être dangereux"
+- Programme:
 
 . . .
 
-Our focus today: the package manager
+    * C'est quoi Nix?
+    * Le problème que Nix résoud
+    * Le *gestionnaire de paquets fonctionnel*
+    * Le langage Nix
+    * rix, ou comment utiliser Nix facilement
 
-## What is Nix? (2/2)
+. . .
 
-A word of warning: Nix is quite complex
+- Si le temps le permet: créer son propre cache de binaires avec [Cachix](https://www.cachix.org/)
 
-It does require some time to learn on the user's part
+## C'est quoi Nix ? (1/2)
 
-But `{rix}` will help
+- Un gestionnaire de paquets
+- Un langage de programmation
+- Une distribution Linux ([NixOS](https://nixos.org/))
 
-## The Nix package manager
+. . .
 
-Package manager: tool to install and manage *packages*
+Le sujet d'aujourd'hui: le gestionnaire de paquets
 
-Package: any piece of software (not just R packages)
+## C'est quoi Nix ? (2/2)
 
-A popular package manager:
+- Nix est un outil complexe
 
-## The Nix package manager
+- Il faut de l'investissement de la part des utilisateurs
+
+- Mais `{rix}` va nous aider!
+
+## Le gestionnaire de paquets Nix
+
+- Gestionnaire de paquets: un outil pour administrer des ...paquets
+
+- Paquet: n'importe quel logiciel (pas seulement des paquets R)
+
+- Voici un gestionnaire de paquets populaire:
+
+## Le gestionnaire de paquets Nix
 
 ![Google Play Store](img/play_store.png)
 
-## The reproducibility continuum
+## Le problème que Nix résoud (1/3)
 
-- Make sure that the required/correct version of R (or any other language) is
-  installed;
-
-- Make sure that the required versions of packages are installed;
-
-- Make sure that system dependencies are installed (for example,
-  Java installation for rJava);
-
-- Make sure that you can install all of this for the hardware you have on hand.
-
-## Reproducibility in the R ecosystem
-
-- Per-project environments not often used
-- Popular choice: `{renv}`, but deals with R packages only
-- Still need to take care of R itself
-- System-level dependencies as well!
+- Proposition de valeur de Nix:
 
 . . .
 
-A popular approach: Docker + `{renv}` (see [Rocker project](https://rocker-project.org/))
+*Installe tous les logiciels nécessaires (R, paquets R, libraries de développement,
+etc) de manière totalement reproductible et sur n'importe quelle plateforme en écrivant
+une seule expression dans le langage Nix.*
+
+## Le problème que Nix résoud (2/3)
+
+- Comment retrouver la même chose sans Nix?
 
 . . .
 
-Nix deals with everything, with one single text file (called a Nix expression)!
+- Il faut figer R avec le [R Installation Manager](https://github.com/r-lib/rig)
+- Il faut figer les paquets R avec `{renv}`
+- Il faut figer **toutes** les autres dépendances *invisibles*, idéalement avec Docker
 
-## "Functional" package manager (1/2)
+. . .
 
-- Nix: a *functional* package manager
+(Remarque: on peut s'abstraire de `rig` si Docker inclut la bonne version de R)
 
-- Functional, as in, inspired by mathematical functions
+. . .
 
-- Why math functions?
+Nix permet de tout gérer d'un seul coup!
+
+## Le problème que Nix résoud (3/3)
+
+- Sans Nix (ou Docker + `{renv}`) on doit accepter les risques suivants:
+
+. . .
+
+    * Collaborateurs travaillent sur des environnements hétérogènes
+    * Les analyses produites ne sont (très probablement) pas reproductibles
+
+
+## Le *gestionnaire de paquets fonctionnel* (1/3)
+
+- Nix est un gestionnaire de paquets *fonctionnel*
+
+- *Fonctionnel*, comme la programmation fonctionnelle inspirée du lambda-calcul
+
+- Lambda-calcul? Pour faire simple:
 
 . . .
 
 -> f(x)=y
 
-- Building a Nix expression always results in the same output
+- f(x) va **toujours** donner y
 
-- Output doesn't depend on state of current system:
+- Autrement dit, y ne dépend de rien d'autre que de x qui est transformé par f
 
-## "Functional" package manager (2/2)
+## Le *gestionnaire de paquets fonctionnel* (2/3)
 
 > The idea is to always deploy component closures: if we deploy a component,
 > then we must also deploy its dependencies, their dependencies, and so on. That
@@ -113,10 +135,12 @@ Nix deals with everything, with one single text file (called a Nix expression)!
 
 <p style="font-size: x-large">Eelco Dolstra, *Nix: A Safe and Policy-Free System for Software Deployment*</p>
 
+## Le *gestionnaire de paquets fonctionnel* (3/3)
 
+- Par exemple: `install.packages("dplyr")` ne va pas toujours donner le même résultat!
+- Quelle est la variable *cachée*?
 
-
-## A basic Nix expression (1/6)
+## Le langage Nix (1/6)
 
 ```
 let
@@ -131,20 +155,17 @@ in
   }
 ```
 
-There's a lot to discuss here!
+## Le langage Nix (2/6)
 
-## A basic Nix expression (2/6)
+- Défini le dépôt à utiliser (avec un commit figé)
+- Liste les paquets à installer
+- Défini ce qui doit être construit: un *shell*
 
-- Written in the Nix language (not discussed)
-- Defines the repository to use (with a fixed revision)
-- Lists packages to install
-- Defines the output: a development shell
+## Le langage Nix (3/6)
 
-## A basic Nix expression (3/6)
-
-- Software for Nix is defined as a mono-repository of tens of thousands of expressions on Github
-- Github: we can use any commit to pin package versions for reproducibility!
-- For example, the following commit installs R 4.3.1 and associated packages:
+- Les paquets Nix sont tous téléchargés depuis un mono-dépôt gigantesque sur Github
+- Github: reproductibilité assurée via les commits!
+- Par exemple, ce commit installera R 4.3.1 et les paquets associés:
 
 . . .
 
@@ -152,12 +173,12 @@ There's a lot to discuss here!
 pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};
 ```
 
-- Let's take a look at the [repository](https://github.com/NixOS/nixpkgs)...
+- Jettons-y un œil [liens vers nixpkgs](https://github.com/NixOS/nixpkgs)...
 
-## A basic Nix expression (4/6)
+## Le langage Nix (4/6)
 
-- `system_packages`: a variable that lists software to install
-- In this case, only R:
+- `system_packages`: une variable qui liste les paquets à installer
+- Ici, seulement R:
 
 . . .
 
@@ -167,9 +188,9 @@ system_packages = builtins.attrValues {
 };
 ```
 
-## A basic Nix expression (5/6)
+## Le langage Nix (5/6)
 
-- Finally, we define a shell:
+- Finalement, on définit un *shell*:
 
 . . .
 
@@ -182,14 +203,14 @@ pkgs.mkShell {
 
 . . .
 
-- This shell will come with the software defined in `system_packages` (`buildInputs`)
-- And launch `R --vanilla` when started (`shellHook`)
+- Ce shell inclura les paquets définis dans `system_packages` (`buildInputs`)
+- Et va lancer `R --vanilla` au démarrage (`shellHook`)
 
-## A basic Nix expression (6/6)
+## Le langage Nix (6/6)
 
-- Writing these expressions requires learning a new language
-- While incredibly powerful, if all we want are per-project reproducible dev shells...
-- ...then `{rix}` will help!
+- Écrire ces expressions nécessite l'apprentissage d'une nouveau langage
+- Un langage puissant certes... mais si tout ce qu'on veut c'est des environnements de développement reproductibles...
+- ...alors `{rix}` est la solution!
 
 ## Nix expressions
 
