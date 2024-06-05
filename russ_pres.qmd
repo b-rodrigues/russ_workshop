@@ -20,7 +20,7 @@ execute:
 
 - Cette présentation est disponible sur le lien suivant [https://is.gd/nix_russ](https://is.gd/nix_russ)
 
-- Code available at: [https://github.com/b-rodrigues/russ_workshop](https://github.com/b-rodrigues/russ_workshop)
+- Code source disponible ici: [https://github.com/b-rodrigues/russ_workshop](https://github.com/b-rodrigues/russ_workshop)
 
 ## Goal of this workshop
 
