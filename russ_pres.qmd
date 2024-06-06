@@ -339,6 +339,6 @@ rix(r_ver = "bleeding_edge",
 
 - Tuto Nix par l'INRIA: [https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/](https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/)
 
-- My blog: [https://b-rodrigues.github.io/rix/](https://b-rodrigues.github.io/rix/)
+- Mon blog: [https://b-rodrigues.github.io/rix/](https://b-rodrigues.github.io/rix/)
 
-- My book (doesn't cover Nix, but Docker, `{renv}` and functional programming): [https://raps-with-r.dev/](https://raps-with-r.dev/)
+- Mon livre (ne parle pas de Nix, mais de reproductibilité avec Docker et renv): [https://raps-with-r.dev/](https://raps-with-r.dev/)
