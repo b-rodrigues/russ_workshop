@@ -212,25 +212,22 @@ pkgs.mkShell {
 - Un langage puissant certes... mais si tout ce qu'on veut c'est des environnements de développement reproductibles...
 - ...alors `{rix}` est la solution!
 
-## Nix expressions
+## Les expressions Nix
 
-- Nix expressions can be used to install software
-- But we will use them to build per-project development shells
-- We will include R, LaTeX packages, or Quarto, Python, Julia....
-- Nix takes care of installing every dependency down to the compiler!
+- Les expressions Nix sont utilisées pour installer des logiciels
+- Nous allons les utiliser pour avoir des shells spécifiques à des projets
+- R, LaTeX, Quarto, Julia... +80'000 paquets disponibles
+- Nix va s'occuper d'installer et gérer toutes les dépendances!
 
-## CRAN and Bioconductor
+## CRAN et Bioconductor
 
-- CRAN is the repository of R packages to extend the language
-- As of writing, +20000 packages available
-- Biocondcutor: repository with a focus on Bioinformatics: +2000 more packages
-- Almost all available through `nixpkgs` in the `rPackages` set!
-- Find packages [here](https://search.nixos.org/packages?channel=23.11&from=0&size=50&sort=relevance&type=packages&query=dplyr)
+- Presque tous les paquets CRAN et Biocondcutor sont disponibles (+23'000)
+- Cherchez les paquets [ici](https://search.nixos.org/packages?channel=23.11&from=0&size=50&sort=relevance&type=packages&query=dplyr)
 
-## rix: reproducible development environments with Nix (1/4)
+## Intro à rix (1/4)
 
-- `{rix}` ([website](https://b-rodrigues.github.io/rix/index.html)) makes writing Nix expression easy!
-- Simply use the provided `rix()` function:
+- `{rix}` ([site](https://b-rodrigues.github.io/rix/index.html)) génère des expressions Nix!
+- Il suffit d'utiliser la fonction `rix()`:
 
 . . .
 
@@ -249,12 +246,12 @@ rix(r_ver = "4.3.1",
     project_path = ".")
 ```
 
-## rix: reproducible development environments with Nix (2/4)
+## Intro à rix (2/4)
 
-- List required R version and packages
-- Optionally: more system packages, packages hosted on Github, or LaTeX packages
-- Optionally: an IDE (Rstudio, Radian, VS Code or "other")
-- Work interactively in an isolated environment!
+- Listez la version de R et les paquets
+- Optionellement: d'autres paquets (logiciels), ou des paquets R sur Github, des paquets LaTeX
+- Optionellement: une interface de développement (Rstudio, Radian, VS Code ou "other")
+- Vous pourrez travailler interactivement ou non!
 
 ## rix: reproducible development environments with Nix (3/4)
 
