@@ -1,5 +1,5 @@
-.gitignore
 .quarto/_freeze/russ_pres/execute-results/html.json
+.quarto/xref/0e1aecd0
 .quarto/xref/3c84af02
 .quarto/xref/487633d8
 .quarto/xref/621ef9bd
@@ -17,3 +17,4 @@ _targets/objects/paper_change
 rendered_slides/img/play_store.png
 rendered_slides/russ_pres.html
 result
+.gitignore
