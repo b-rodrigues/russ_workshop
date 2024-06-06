@@ -253,29 +253,29 @@ rix(r_ver = "4.3.1",
 - Optionellement: une interface de développement (Rstudio, Radian, VS Code ou "other")
 - Vous pourrez travailler interactivement ou non!
 
-## rix: reproducible development environments with Nix (3/4)
+## Intro à rix (3/4)
 
-- `rix::rix()` generates a `default.nix` file
-- Build expressions using `nix-build` (in terminal) or `rix::nix_build()` from R 
-- "Drop" into the development environment using `nix-shell`
-- Expressions can be generated even without Nix installed
+- `rix::rix()` génère un fichier `default.nix`
+- Utilisez `nix-build` (dans le terminal) ou `rix::nix_build()` depuis R pour installer le shell défini dans `default.nix`
+- Démarrez le shell avec `nix-shell`
+- Il est possible de générer des expressions même si Nix n’est pas installé
 
-## rix: reproducible development environments with Nix (4/4)
+## Intro à rix (4/4)
 
-- Can install specific versions of packages (write `"dplyr@1.0.0"`)
-- Can install packages hosted on Github
-- Many vignettes to get you started! [See here](https://b-rodrigues.github.io/rix/articles/)
+- Possible d'installer des versions spécifiques (write `"dplyr@1.0.0"`)
+- Ou des paquets seulement dispos sur Github
+- Beaucoup de documentation [disponible](https://b-rodrigues.github.io/rix/articles/)
 
 . . .
 
-Let's check out `expressions/rix_intro/`
+Jettons un coup d'œil à `expressions/rix_intro/` maintenant...
 
-## Non-interactive use
+## Utilisation "non-interactive"
 
-- `{rix}` makes it easy to run pipelines in the right environment
-- (Little side note: the best tool to build pipelines in R is `{targets}`)
-- See `expressions/nix_targets_pipeline`
-- Can also run the pipeline like so:
+- `{rix}` rend possible d’exécuter des pipelines dans le bon environnement
+- (Petite parenthèse: le meilleur paquet pour créer des pipelines avec R est `{targets}`)
+- Regardons `expressions/nix_targets_pipeline`
+- Aussi possible d’executer la pipeline sans devoir d’abord entrer dans le shell:
 
 . . .
 
