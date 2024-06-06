@@ -283,69 +283,61 @@ Jettons un coup d'œil à `expressions/rix_intro/` maintenant...
 cd /absolute/path/to/pipeline/ && nix-shell default.nix --run "Rscript -e 'targets::tar_make()'"
 ```
 
-## Nix and Github Actions: running pipelines
+## Nix et Github Actions: lancer une pipeline
 
-- Possible to easily run a `{targets}` pipeline on Github actions
-- Simply run `rix::tar_nix_ga()` to generate the required files
-- Commit and push, and watch the actions run!
-- See [here](https://github.com/b-rodrigues/nix_targets_pipeline/tree/master).
+- Simple d’exécuter une pipeline `{targets}` dans Github actions
+- Lancez `rix::tar_nix_ga()` pour générer les fichiers nécessaires
+- Committez et poussez, et regardez la pipeline tourner sur GA!
+- [Voir ici](https://github.com/b-rodrigues/nix_targets_pipeline/tree/master).
 
-## Nix and Github Actions: writing papers
+## Nix et Github Actions: écrire des documents
 
-- Easy collaboration on papers as well
-- See [here](https://github.com/b-rodrigues/rix_paper/tree/master)
-- Just focus on writing!
+- Possible de collaborer sur des documents aussi
+- Regardez ici [here](https://github.com/b-rodrigues/rix_paper/tree/master)
+- Concentrez-vous sur l’écriture!
 
 ## Subshells
 
-- Also possible to evaluate single functions inside a "subshell"
-- Works from R installed via Nix or not!
-- Very useful to use hard-to-install packages such as {arrow}
-- See `expressions/subshell`
+- Il est aussi possible d’exécuter une seule commande depuis un "subshell"
+- Fonctionne depuis un R installé "traditionnellement" ou via Nix
+- Utile dans le cas où on a besoin d’un paquet difficile à installer, comme {arrow} (dans certains cas)
+- Regardons `expressions/subshell`
 
-## R packages release cycle
+## Cycle de publication des paquets R pour Nix
 
-- CRAN is updated daily, but it’s not reflected in nixpkgs
-- The `rPackages` set gets updated around new R releases (every 3 months or so)
-- What if more recent packages are required?
-- One solution: use our `nixpkgs` fork from our `rstats-on-nix` [organisation](https://github.com/rstats-on-nix/nixpkgs/tree/r-daily)!
+- CRAN est mis à jour quotidiennement, mais ce n’est pas le cas sur `nixpkgs`
+- L'ensemble `rPackages` est mis à jour avec une nouvelle sortie de R (tous les 3 mois grosso modo)
+- "Mais si j’ai besoin de paquets à jour?"
+- Une solution: utilisez notre fork de  `nixpkgs`: `rstats-on-nix` [ici](https://github.com/rstats-on-nix/nixpkgs/tree/r-daily)!
 
-## Bleeding edge development environments (1/2)
+## Paquets quotidiennement mis à jour (1/2)
 
-- To use our bleeding edge fork simply change the `pkgs` variable:
-
-. . .
+- Pour utiliser notre fork, utilisez "bleeding_edge" ou "frozen_edge":
 
 ```
-pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/refs/heads/r-daily.tar.gz") {};
+rix(r_ver = "bleeding_edge",
+    r_pkgs = c("dplyr", "ggplot2"),
+    ...
+}
 ```
 
-- You can also use a specific commit of the fork instead:
+- "bleeding_edge": génère un environnement frais à chaque build
+- "frozen_edge": génère un environnement frais au premier build, figé par la suite
 
-. . .
+## Paquets quotidiennement mis à jour (2/2)
 
-```
-pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/78f705bd8689ad7d215f4b3aea9d9c1302a31b99.tar.gz") {};
-```
+- Problème: tous les paquets doivent être compilés
+- Solution: utilisez notre Cache de paquets binaires :)
+- La vignette ["bleeding edge"](https://b-rodrigues.github.io/rix/articles/z-bleeding_edge.html) explique tout ça!
+- Possible aussi de configurer [votre propre cache](https://b-rodrigues.github.io/rix/articles/z-binary_cache.html)
 
-. . .
+## Pour en apprendre plus
 
-- Will soon be supported in `{rix}`
-
-## Bleeding edge development environments (2/2)
-
-- But: everything needs to be built from source
-- Solution: roll out your own binary cache using [Cachix](https://www.cachix.org/)
-- Build the development environment on Github Actions
-- On your pc: install pre-compiled binaries!
-
-## To know more
-
-- Official Nix documentation: [https://nix.dev/](https://nix.dev/)
+- Documentation officielle de Nix: [https://nix.dev/](https://nix.dev/)
 
 - Nix pills: [https://nixos.org/guides/nix-pills/00-preface](https://nixos.org/guides/nix-pills/00-preface)
 
-- Nix tutorial by INRIA: [https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/](https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/)
+- Tuto Nix par l'INRIA: [https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/](https://nix-tutorial.gitlabpages.inria.fr/nix-tutorial/)
 
 - My blog: [https://b-rodrigues.github.io/rix/](https://b-rodrigues.github.io/rix/)
 
