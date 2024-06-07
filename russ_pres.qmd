@@ -67,12 +67,12 @@ Le sujet d'aujourd'hui: le gestionnaire de paquets
 
 ## Le problème que Nix résoud (1/3)
 
-- Proposition de valeur de Nix:
+- La promesse de Nix:
 
 . . .
 
-*Installe tous les logiciels nécessaires (R, paquets R, libraries de développement,
-etc) de manière totalement reproductible et sur n'importe quelle plateforme en écrivant
+*Installe tous les logiciels nécessaires (R, paquets R, librairies de développement,
+etc) de manière totalement reproductible et sur n'importe quelle plate-forme en écrivant
 une seule expression dans le langage Nix.*
 
 ## Le problème que Nix résoud (2/3)
@@ -257,7 +257,7 @@ rix(r_ver = "4.3.1",
 
 ## Intro à rix (4/4)
 
-- Possible d'installer des versions spécifiques (write `"dplyr@1.0.0"`)
+- Possible d'installer des versions spécifiques (syntaxe: `"dplyr@1.0.0"`)
 - Ou des paquets seulement dispos sur Github
 - Beaucoup de documentation [disponible](https://b-rodrigues.github.io/rix/articles/)
 
@@ -270,7 +270,7 @@ Jettons un coup d'œil à `expressions/rix_intro/` maintenant...
 - `{rix}` rend possible d’exécuter des pipelines dans le bon environnement
 - (Petite parenthèse: le meilleur paquet pour créer des pipelines avec R est `{targets}`)
 - Regardons `expressions/nix_targets_pipeline`
-- Aussi possible d’executer la pipeline sans devoir d’abord entrer dans le shell:
+- Aussi possible d'exécuter la pipeline sans devoir d’abord entrer dans le shell:
 
 . . .
 
