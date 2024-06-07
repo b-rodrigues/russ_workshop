@@ -309,6 +309,8 @@ cd /absolute/path/to/pipeline/ && nix-shell default.nix --run "Rscript -e 'targe
 
 - Pour utiliser notre fork, utilisez "bleeding_edge" ou "frozen_edge":
 
+. . .
+
 ```
 rix(r_ver = "bleeding_edge",
     r_pkgs = c("dplyr", "ggplot2"),
