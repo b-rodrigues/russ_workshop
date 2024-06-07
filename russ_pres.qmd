@@ -97,11 +97,8 @@ Nix permet de tout gérer d'un seul coup!
 
 - Sans Nix (ou Docker + `{renv}`) on doit accepter les risques suivants:
 
-. . .
-
     * Collaborateurs travaillent sur des environnements hétérogènes
     * Les analyses produites ne sont (très probablement) pas reproductibles
-
 
 ## Le *gestionnaire de paquets fonctionnel* (1/3)
 
