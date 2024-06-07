@@ -27,15 +27,11 @@ execute:
 - Apprendre juste ce qu'il faut de Nix pour "être dangereux"
 - Programme:
 
-. . .
-
     * C'est quoi Nix?
     * Le problème que Nix résoud
     * Le *gestionnaire de paquets fonctionnel*
     * Le langage Nix
     * rix, ou comment utiliser Nix facilement
-
-. . .
 
 - Si le temps le permet: créer son propre cache de binaires avec [Cachix](https://www.cachix.org/)
 
