@@ -135,6 +135,10 @@ Nix permet de tout gérer d'un seul coup!
 - Par exemple: `install.packages("dplyr")` ne va pas toujours donner le même résultat!
 - Quelle est la variable *cachée*?
 
+## Le *gestionnaire de paquets fonctionnel* (3/3)
+
+![Attention aux effets de bord!](img/procedural_vs_fonctional.png)
+
 ## Le langage Nix (1/6)
 
 ```

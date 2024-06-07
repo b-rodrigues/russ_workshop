@@ -11,6 +11,7 @@
 .quarto/xref/99d723cb
 .quarto/xref/INDEX
 .quarto/xref/a147c91e
+.quarto/xref/a9c79fe5
 .quarto/xref/ecffabd6
 .targets-files
 .targets-runs/
@@ -20,6 +21,7 @@ _targets/meta/process
 _targets/meta/progress
 _targets/objects/paper_change
 rendered_slides/img/play_store.png
+rendered_slides/img/procedural_vs_fonctional.png
 rendered_slides/russ_pres.html
 result
 .gitignore
